@@ -1,0 +1,84 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Qr Code GIMPA</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Students Details</h1>
+        <input type="text" placeholder="Last_name" id="qrname">
+        <input type="text" placeholder="First_name" id="qrother">
+        <input type="text" placeholder="Index_Number" id="qrindex">
+        <input type="text" placeholder="Student_Email" id="qremail">
+        <input type="text" placeholder="Wifi_Password" id="qrpassword">
+
+        <div id="imgBox">
+        <img src="" id="qrImage">
+        </div>
+        <button onclick="generateQR()">Generate Qr_code</button>
+        <button onclick="downloadQR()">Download QR Code</button>
+    </div>
+
+    <script>
+        /**-----------------------CHRISTIAN SALLAH---------------------*/
+
+        let imgBox= document.getElementById("imgBox");
+        let qrImage= document.getElementById("qrImage");
+        let qrname= document.getElementById("qrname");
+        let qrother= document.getElementById("qrother");
+        let qrindex= document.getElementById("qrindex");
+        let qremail= document.getElementById("qremail");
+        let qrpassword= document.getElementById("qrpassword");
+        
+        function generateQR(){
+            
+            if(qrname.value.length>0 && qrother.value.length>0 && qrindex.value.length>0 &&
+            qremail.value.length>0 && qrpassword.value.length>0 ){
+
+                var qrData = qrname.value + " " + qrother.value + " " + qrindex.value + " " + qremail.value + " " + qrpassword.value;
+
+            // Generation of QR code URL
+                qrImage.src = "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + encodeURIComponent(qrData);
+
+                /**qrImage.src ="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data= " +qrname.value +qrother.value+qrindex.value+
+                qremail.value+  qrpassword.value ;*/
+
+                imgBox.classList.add("show-img");
+            }else{
+                /** ERROR MANAGEMENT*/
+                qrname.classList.add('error');
+                qrother.classList.add('error');
+                qrindex.classList.add('error');
+                qremail.classList.add('error');
+                qrpassword.classList.add('error');
+                setTimeout(()=>{
+                    qrname.classList.remove('error');
+                    qrother.classList.remove('error');
+                    qrindex.classList.remove('error');
+                    qremail.classList.remove('error');
+                    qrpassword.classList.remove('error');
+                },1000)
+            }
+            
+        }
+        /**FUNCTION DOWNLOAD*/
+        function downloadQR() {
+            let link = document.createElement('a');
+            link.href = qrImage.src;
+            link.download = 'qr_code.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+         /**FUNCTION PRINTED*/
+        function printQR() {
+            let printWindow = window.open('', '', 'width=600,height=600');
+            printWindow.document.write('<img src="' + qrImage.src + '" onload="window.print();window.close();" />');
+            printWindow.document.close();
+        }
+    </script>
+</body>
+</html>
